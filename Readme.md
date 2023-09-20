@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Наталья Володина](https://up.htmlacademy.ru/nodejs-api/5/user/90698).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Сушко](https://htmlacademy.ru/profile/sashasushko).
 
 ---
 
