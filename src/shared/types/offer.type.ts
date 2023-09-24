@@ -5,9 +5,9 @@ import { User } from './user.type.js';
 export type Offer = {
   title: string;
   description: string;
-  postData: Date;
+  postData: string;
   city: string;
-  preview_image: string;
+  preview: string;
   image: string;
   premium: boolean;
   favourites: boolean;
@@ -16,7 +16,7 @@ export type Offer = {
   room: number;
   guests: number;
   price: number;
-  comfort: Comfort;
+  comfort: Comfort[];
   user: User;
   comments: number;
   coordinates: string;
