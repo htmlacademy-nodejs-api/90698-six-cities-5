@@ -1,0 +1,74 @@
+{
+  "api": {
+    "titles": [
+      "Квартира101",
+      "Квартира102",
+      "Квартира103",
+      "Квартира104",
+      "Квартира105"
+    ],
+    "descriptions": [
+      "Красивая и уютная квартира в раскошном месте.",
+      "Красивая и уютная квартира в парке.",
+      "Квартира для тех кому пофиг",
+      "Элитная квартира с басейном",
+      "Квартира кота, но вас впустит"
+    ],
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg"
+    ],
+    "previews": [
+      "amsterdam.jpg",
+      "cologne.jpg",
+      "brussels.jpg",
+      "paris.jpg",
+      "hamburg.jpg"
+    ],
+    "images": [
+      "apartment-01.jpg",
+      "apartment-02.jpg",
+      "apartment-03.jpg",
+      "apartment-04.jpg",
+      "apartment-05.jpg"
+    ],
+    "types": [
+      "Apartment",
+      "House",
+      "Room",
+      "Hotel"
+    ],
+    "comforts": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer"
+    ],
+    "firstname": [
+      "Иван",
+      "Олег",
+      "Пьер",
+      "Роланд",
+      "Холи"
+    ],
+    "emails": [
+      "snow@pisem.local",
+      "president@dka.local",
+      "fish@big.local",
+      "test@pisem.local",
+      "freedom@pisem.local"
+    ],
+    "avatarsPath": [
+      "user.jpg",
+      "photo.jpg",
+      "awesome-avatar.jpg",
+      "roland.jpg",
+      "smite.jpg",
+      "coffee.jpg"
+    ]
+  }
+}
