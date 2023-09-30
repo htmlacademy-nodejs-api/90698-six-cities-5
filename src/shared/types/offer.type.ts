@@ -5,7 +5,7 @@ import { User } from './user.type.js';
 export type Offer = {
   title: string;
   description: string;
-  postData: Date;
+  postData: string;
   city: string;
   preview: string;
   image: string;
