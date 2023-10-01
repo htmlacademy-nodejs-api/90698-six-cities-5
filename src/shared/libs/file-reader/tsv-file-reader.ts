@@ -21,18 +21,18 @@ export class TSVFileReader extends EventEmitter implements FileReader {
 
 
     for await (const chunk of readStream) {
-        remainingData += chunk.toString();
+      remainingData += chunk.toString();
 
-        while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
-          const completeRow = remainingData.slice(0, nextLinePosition + 1);
-          remainingData = remainingData.slice(++nextLinePosition);
-          importedRowCount++;
+      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
 
-          this.emit('line', completeRow);
-        }
+        this.emit('line', completeRow);
       }
+    }
 
-      this.emit('end', importedRowCount);
+    this.emit('end', importedRowCount);
   }
 
 }
