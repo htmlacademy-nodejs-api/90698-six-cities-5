@@ -7,14 +7,31 @@ export interface UserDocument extends User, Document {
 }
 
 const userSchema = new Schema({
-  firstname: String,
+  firstname: {
+    type: String,
+    required: true,
+    minlength: [1, 'Min length for firstname is 1'],
+    maxLength: [15, 'Max length for firstname is 15']
+  },
   email: {
     type: String,
     unique: true,
+    match: [/^([\w-\\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Email is incorrect'],
+    required: true,
   },
-  avatarPath: String,
-  password: String,
-  userType: String,
+  avatarPath: {
+    type: String,
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: [6, 'Min length for password is 6'],
+    maxLength: [12, 'Max length for password is 12']
+  },
+  userType: {
+    type: String,
+    required: true,
+  }
 }, { timestamps: true });
 
 export const UserModel = model<UserDocument>('User', userSchema);
