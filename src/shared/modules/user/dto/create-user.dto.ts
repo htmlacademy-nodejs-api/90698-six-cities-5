@@ -3,4 +3,5 @@ export class CreateUserDto {
   public email: string;
   public avatarPath: string;
   public password: string;
+  public userType: string;
 }
