@@ -40,7 +40,6 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public rating!: number;
 
   @prop({
-    required: true,
     type: () => String,
     enum: OfferType
   })
