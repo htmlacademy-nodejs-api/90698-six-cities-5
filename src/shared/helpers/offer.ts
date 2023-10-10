@@ -19,7 +19,6 @@ export function createOffer(offerData: string): Offer {
     firstname,
     email,
     avatarPath,
-    password,
     userType,
     comments,
     coordinates
@@ -28,7 +27,7 @@ export function createOffer(offerData: string): Offer {
   return {
     title,
     description,
-    postData,
+    postDate: new Date(postData),
     city,
     preview,
     image,
@@ -41,7 +40,7 @@ export function createOffer(offerData: string): Offer {
     price: Number.parseInt(price, 10),
     comfort: comfort.split(';')
       .map((comforts) => Comfort[comforts as 'Breakfast' | 'AirConditioning' | 'LaptopFriendlyWorkspace' | 'BabySeat' | 'Washer' | 'Towels' | 'Fridge']),
-    user: { firstname, email, avatarPath, password, userType },
+    user: { firstname, email, avatarPath, userType },
     comments: Number.parseInt(comments, 10),
     coordinates,
   };
