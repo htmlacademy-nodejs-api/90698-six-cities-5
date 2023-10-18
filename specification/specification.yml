@@ -1,0 +1,532 @@
+openapi: 3.0.0
+info:
+  title: API сервер для демо-проекта «Куплю. Продам».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Куплю. Продам».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: offers
+    description: Действия с объявлениями.
+  - name: comments
+    description: Действия с комментариями.
+  - name: users
+    description: Действия с пользователем.
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "409":
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля.
+      responses:
+        '200':
+          description: Пользователь успешно авторизирован.
+          content:
+            text/plain:
+              schema:
+               $ref: '#/components/schemas/user'
+        '401':
+          description: Данный пользователь не найден.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизованному пользователю
+      responses:
+        '200':
+          description: Пользователь успешно авторизирован.
+          content:
+            text/plain:
+              schema:
+               $ref: '#/components/schemas/user'
+        '401':
+          description: Пользователь не авторизирован.
+
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение
+        аватара должно быть в формате `png` или `jpg`.
+      responses:
+        "201":
+          description: Аватарка загружена.
+          content:
+            application/json:
+              schema:
+               type: string
+        "403":
+          description: Загружать аватарку могут только авторизованные пользователи.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Завершение сеанса пользователя
+      description: Завершает сеанс авторизованного пользователя.
+      responses:
+        '204':
+          description: Сессия успешно завершена.
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Запрос списка предложений по аренде
+      description: Возвращает список предложений по аренде.
+      responses:
+        "200":
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/offers"
+        "400":
+          description: Список предложений пуст. Ошибка запроса.
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Создается новое предложение по аренде.
+      requestBody:
+        description: Информация для создания предложения об аренде.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createdOffer"
+        required: true
+      responses:
+        "201":
+          description: Предложение об аренде успешно создано.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+        "403":
+          description: Создавать предложения об аренде могут только авторизованные пользователи.
+
+  /offers/{offerId}:
+    put:
+      tags:
+        - offers
+      summary: Редактирование существующего предложения
+      description: Вносятся изменения в предложение по аренде.
+      requestBody:
+        description: Информация для редактирования предложения об аренде.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateOffer"
+        required: true
+
+      responses:
+        "200":
+          description: Предложение об аренде успешно изменено.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+        "403":
+          description: Редактировать можно только свои предложения.
+
+    delete:
+      tags:
+        - offers
+      summary: Удаление существующего предложения
+      description: Происходит удаление предложения по аренде.
+
+      responses:
+        "204":
+          description: Предложение об аренде успешно удалено.
+        "403":
+          description: Удалять можно только свои предложения.
+
+    get:
+      tags:
+        - offers
+      summary: Запрос детальной информации о предложении аренды
+      description: Возвращает подробное описание одного предложения аренды.
+
+      responses:
+        "200":
+          description: Предложение об аренде успешно получено.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+
+
+  /comments/{offerId}:
+    get:
+      tags:
+        - comments
+      summary: Запрос списка комментариев по обьявлению
+      description: Возвращает список комментариев по обьявлению.
+
+      responses:
+        "200":
+          description: Список комментариев.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/comments"
+    post:
+      tags:
+        - comments
+      summary: Создание нового комментария
+      description: Создает новый комментарий к обьявлению.
+
+      requestBody:
+        description: Информация для создания комментария.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createComment"
+        required: true
+
+      responses:
+        "200":
+          description: Комментарий успешно создан.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/comments"
+        "403":
+          description: Создавать комментарии могут только авторизованные пользователи.
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+
+        firstname:
+          type: string
+          example: Vera
+
+        email:
+          type: string
+          example: verka@gmail.com
+
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        email:
+          type: string
+          example: verka@gmail.com
+
+    createdOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Lorem ipsum dolor sit amet.
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        offerDate:
+          type: string
+          format: date-time
+          example: 01/01/2023T12:23:34.843Z
+        city:
+          type: string
+          enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
+          example: Amsterdam
+        previewImageURL:
+          type: string
+          example: https://www.domain.com/image.png
+        images:
+          type: array
+          items:
+            type: string
+          example: [https://www.domain.com/image1.png, https://www.domain.com/image.jpg', https://www.domain.com/image3.png]
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 3
+        type:
+          type: string
+          enum: [apartment, house, room, hotel]
+          example: house
+        bedrooms:
+          type: number
+          example: 1
+        maxAdults:
+          type: number
+          example: 3
+        price:
+          type: number
+          example: 1000
+        goods:
+          type: array
+          items:
+            type: string
+            enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
+          example: [Breakfast, Air conditioning]
+        hostId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        reviews:
+          type: number
+          example: 12
+        coordinates:
+          type: array
+          items:
+            type: number
+          example: [52.370216, 4.895168]
+
+    offers:
+      type: array
+      items:
+        type: object
+        properties:
+          title:
+            type: string
+            example: Lorem ipsum dolor sit amet.
+          offerDate:
+            type: string
+            format: date-time
+            example: 01/01/2023T12:23:34.843Z
+          city:
+            type: string
+            enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
+            example: Amsterdam
+          previewImageURL:
+            type: string
+            example: 'https://www.domain.com/image.png'
+          isPremium:
+            type: boolean
+            example: true
+          isFavorite:
+            type: boolean
+            example: false
+          rating:
+            type: number
+            example: 3
+          type:
+            type: string
+            enum: [apartment, house, room, hotel]
+            example: house
+          price:
+            type: number
+            example: 1000
+          reviews:
+            type: number
+            example: 12
+
+    offer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Lorem ipsum dolor sit amet.
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        offerDate:
+          type: string
+          format: date-time
+          example: 01/01/2023T12:23:34.843Z
+        city:
+          type: string
+          enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
+          example: Amsterdam
+        previewImageURL:
+          type: string
+          example: 'https://www.domain.com/image.png'
+        images:
+          type: array
+          items:
+            type: string
+          example: [https://www.domain.com/image1.png, https://www.domain.com/image.jpg', https://www.domain.com/image3.png]
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 3
+        type:
+          type: string
+          enum: [apartment, house, room, hotel]
+          example: house
+        bedrooms:
+          type: number
+          example: 1
+        maxAdults:
+          type: number
+          example: 3
+        price:
+          type: number
+          example: 1000
+        goods:
+          type: array
+          items:
+            type: string
+            enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
+          example: [Breakfast, Air conditioning]
+        hostId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        reviews:
+          type: number
+          example: 12
+        coordinates:
+          type: array
+          items:
+            type: number
+          example: [52.370216, 4.895168]
+
+    updateOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Lorem ipsum dolor sit amet.
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        offerDate:
+          type: string
+          format: date-time
+          example: 01/01/2023T12:23:34.843Z
+        city:
+          type: string
+          enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
+          example: Amsterdam
+        previewImageURL:
+          type: string
+          example: https://www.domain.com/image.png
+        images:
+          type: array
+          items:
+            type: string
+          example: [https://www.domain.com/image1.png, https://www.domain.com/image.jpg', https://www.domain.com/image3.png]
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 3
+        type:
+          type: string
+          enum: [apartment, house, room, hotel]
+          example: house
+        bedrooms:
+          type: number
+          example: 1
+        maxAdults:
+          type: number
+          example: 3
+        price:
+          type: number
+          example: 1000
+        goods:
+          type: array
+          items:
+            type: string
+            enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
+          example: [Breakfast, Air conditioning]
+        hostId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        reviews:
+          type: number
+          example: 12
+        coordinates:
+          type: array
+          items:
+            type: number
+          example: [52.370216, 4.895168]
+
+    createComment:
+      type: object
+      properties:
+        text:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        commentDate:
+          type: string
+          format: date-time
+          example: 01/01/2023T12:23:34.843Z
+        rating:
+          type: number
+          example: 4
+        authorId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+
+    comments:
+      type: array
+      items:
+        type: object
+      properties:
+        text:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        commentDate:
+          type: string
+          format: date-time
+          example: 01/01/2023T12:23:34.843Z
+        rating:
+          type: number
+          example: 4
+        authorId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+
+
