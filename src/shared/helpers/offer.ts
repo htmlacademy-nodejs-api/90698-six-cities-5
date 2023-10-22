@@ -20,7 +20,6 @@ export function createOffer(offerData: string): Offer {
     email,
     avatarPath,
     userType,
-    comments,
     coordinates
   ] = offerData.replace('\n', '').split('\t');
 
@@ -41,7 +40,7 @@ export function createOffer(offerData: string): Offer {
     comfort: comfort.split(';')
       .map((comforts) => Comfort[comforts as 'Breakfast' | 'AirConditioning' | 'LaptopFriendlyWorkspace' | 'BabySeat' | 'Washer' | 'Towels' | 'Fridge']),
     user: { firstname, email, avatarPath, userType },
-    comments: Number.parseInt(comments, 10),
+    commentCount: 0,
     coordinates,
   };
 }

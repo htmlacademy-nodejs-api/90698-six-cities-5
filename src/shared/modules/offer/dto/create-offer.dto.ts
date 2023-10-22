@@ -17,5 +17,6 @@ export class CreateOfferDto {
   public price: number;
   public comfort: Comfort[];
   public userId: string;
+  public commentCount: number;
   public coordinates: string;
 }
