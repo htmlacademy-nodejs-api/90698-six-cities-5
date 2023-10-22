@@ -36,7 +36,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public favourites!: boolean;
 
-  @prop({required: true})
+  @prop({required: true, default: 0})
   public rating!: number;
 
   @prop({
@@ -68,7 +68,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public userId!: Ref<UserEntity>;
 
   @prop({default: 0})
-  public comments!: number;
+  public commentCount!: number;
 
   @prop({required: true})
   public coordinates!: string;

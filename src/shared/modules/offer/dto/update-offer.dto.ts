@@ -15,7 +15,6 @@ export class UpdateOfferDto {
   public guests?: number;
   public price?: number;
   public comfort?: Comfort[];
-  public userId?: string;
   public coordinates?: string;
 }
 

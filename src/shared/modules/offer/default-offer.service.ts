@@ -29,13 +29,46 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
-    const limit = count ?? DEFAULT_OFFER_COUNT;
+  public async find(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({limit})
-      .sort({ createdAt: SortType.Down })
-      .populate(['userId'])
-      .exec();
+      .aggregate([
+        {
+          $lookup: {
+            from: 'comments',
+            let: { offerId: '$_id' },
+            pipeline: [
+              { $match: { $expr: { $in: ['$$offerId', '$offers'] } } },
+              { $project: { _id: 1 } },
+            ],
+            as: 'comments',
+          }
+        },
+        {
+          $addFields: {
+            id: { $toString: '$_id' },
+            commentsCount: { $size: '$comments' },
+            rating: {
+              $divide: [
+                {
+                  $reduce: {
+                    input: '$comments',
+                    initialValue: 0,
+                    in: {
+                      $add: ['$$value', '$$this.rating'],
+                    },
+                  },
+                },
+                {
+                  $cond: [{ $ne: [{ $size: '$comments' }, 0] }, { $size: '$comments' }, 1],
+                },
+              ],
+            },
+          },
+        },
+        { $unset: 'comments' },
+        { $limit: DEFAULT_OFFER_COUNT },
+        { $sort: { commentsCount: SortType.Down } },
+      ]).exec();
   }
 
   public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
@@ -61,54 +94,5 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, {'$inc': {
         commentCount: 1,
       }}).exec();
-  }
-
-
-  public async updateRating(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel
-      .aggregate([
-        {
-          $match: {
-            $expr: {
-              $eq: [
-                '$_id',
-                {
-                  $toObjectId: offerId,
-                },
-              ],
-            },
-          },
-        },
-        {
-          $lookup: {
-            from: 'comments',
-            let: {
-              offerId: '$_id',
-            },
-            pipeline: [
-              {
-                $match: {
-                  $expr: {
-                    $eq: ['$$offerId', '$offerId'],
-                  },
-                },
-              },
-            ],
-            as: 'comments',
-          },
-        },
-        {
-          $set: {
-            rating: {
-              $avg: '$comments.rating',
-            },
-          },
-        },
-        {
-          $unset: 'comments',
-        },
-      ])
-      .exec()
-      .then(([result]) => result ?? null);
   }
 }
