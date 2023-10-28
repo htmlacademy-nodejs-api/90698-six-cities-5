@@ -1,0 +1,30 @@
+# Список предложений
+## Получить список предложений
+GET http://localhost:5000/offers HTTP/1.1
+Content-Type: application/json
+
+###
+## Добавить новое предложение
+POST http://localhost:5000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "New house new offer",
+  "description": "New description",
+  "postDate": "0",
+  "city": "Paris",
+  "preview": "av1.png",
+  "image": "av2.png",
+  "premium": true,
+  "favourites": true,
+  "rating": 2.2,
+  "type": "House",
+  "room": 3,
+  "guests": 3,
+  "price": 1200,
+  "comfort": "Washer",
+  "userId": 121212121211,
+  "commentCount": 0,
+  "coordinates": 1245666468
+
+}
