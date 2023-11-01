@@ -1,6 +1,7 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { OfferType } from '../../../types/offer-type.enum.js';
 import { Comfort } from '../../../types/comfort-type.enum.js';
+import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 export class OfferRdo {
 
@@ -46,8 +47,9 @@ export class OfferRdo {
   @Expose()
   public comfort: Comfort;
 
-  @Expose()
-  public userId: number;
+  @Expose({ name: 'userId'})
+  @Type(() => UserRdo)
+  public user: UserRdo;
 
   @Expose()
   public commentCount: number;
