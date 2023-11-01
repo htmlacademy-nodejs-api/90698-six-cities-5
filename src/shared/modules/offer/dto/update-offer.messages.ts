@@ -1,4 +1,4 @@
-export const CreateOfferValidationMessage = {
+export const CreateUpdateOfferMessage = {
   title: {
     minLength: 'Minimum title length must be 10',
     maxLength: 'Maximum title length must be 100',
@@ -16,23 +16,20 @@ export const CreateOfferValidationMessage = {
   favourites: {
     invalidFormat: 'Field favourites must be boolean',
   },
-  type: {
+  offerType: {
     invalid: 'type must be Apartment or House or Room or Hotel',
   },
   room: {
     invalidValue: 'Minimum room is 1 and Maximum room is 8',
   },
   guests: {
-    minValue: 'Minimum guests is 1',
-    maxValue: 'Maximum guests is 10',
+    invalidValue: 'Minimum guests is 1 and Maximum guests is 10',
   },
   comfort:{
-    invalidFormat: 'Field comfort must be an array',
     invalid: 'Comfort must be Breakfas or',
   },
   price: {
-    minValue: 'Minimum price is 100',
-    maxValue: 'Maximum price is 200000',
+    invalidValue: 'Minimum price is 100 and Maximum price is 200000',
   },
   userId: {
     invalidId: 'userId field must be a valid id',

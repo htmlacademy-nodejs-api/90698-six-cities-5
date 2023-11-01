@@ -28,8 +28,8 @@ export class CreateOfferDto {
   @IsEnum(OfferType, { message: CreateOfferValidationMessage.type.invalid })
   public type: OfferType;
 
-  @Min(1, { message: CreateOfferValidationMessage.room.minValue })
-  @Max(8, { message: CreateOfferValidationMessage.room.maxValue })
+  @Min(1, { message: CreateOfferValidationMessage.room.invalidValue })
+  @Max(8, { message: CreateOfferValidationMessage.room.invalidValue })
   public room: number;
 
   @Min(1, { message: CreateOfferValidationMessage.guests.minValue })
