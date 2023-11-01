@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod, HttpError, ValidateObjectIdMiddleware, ValidateDtoMiddleware } from '../../libs/rest/index.js';
+import { BaseController, DocumentExistsMiddleware, HttpMethod, HttpError, ValidateObjectIdMiddleware, ValidateDtoMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { OfferService } from './offer-service.interface.js';
@@ -32,7 +32,10 @@ export class OfferController extends BaseController {
       new ValidateObjectIdMiddleware('offerId'),
       new ValidateDtoMiddleware(UpdateOfferDto),
     ] });
-    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.Get, handler: this.getComments, middlewares: [new ValidateObjectIdMiddleware('offerId')] });
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.Get, handler: this.getComments, middlewares: [
+      new ValidateObjectIdMiddleware('offerId'),
+      new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+    ] });
   }
 
   public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
