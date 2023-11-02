@@ -5,7 +5,7 @@ POST http://localhost:4000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "toggrns@overlook.net",
+  "email": "toggjjrns@overlook.net",
   "avatarPath": "torrance.png",
   "firstname": "Jack",
   "password": "shining",
@@ -20,7 +20,7 @@ POST http://localhost:4000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "torans@overlook.net",
+  "email": "toggjjrns@overlook.net",
   "password": "shining"
 }
 
