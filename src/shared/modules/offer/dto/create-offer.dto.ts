@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsEnum, IsMongoId, MaxLength, MinLength, IsBoolean, Min, Max } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, MaxLength, MinLength, IsBoolean, Min, Max } from 'class-validator';
 import { OfferType } from '../../../types/index.js';
 import { Comfort } from '../../../types/index.js';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
@@ -44,7 +44,6 @@ export class CreateOfferDto {
   @IsEnum(Comfort, { message: CreateOfferValidationMessage.comfort.invalid })
   public comfort: Comfort[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.userId.invalidId })
   public userId: string;
 
   public coordinates: string;
