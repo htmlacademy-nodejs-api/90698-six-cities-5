@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, DocumentExistsMiddleware, HttpMethod, ValidateObjectIdMiddleware, ValidateDtoMiddleware } from '../../libs/rest/index.js';
+import { BaseController, DocumentExistsMiddleware, HttpMethod, PrivateRouteMiddleware,ValidateObjectIdMiddleware, ValidateDtoMiddleware } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { OfferService } from './offer-service.interface.js';
@@ -27,13 +27,17 @@ export class OfferController extends BaseController {
       new ValidateObjectIdMiddleware('offerId'),
       new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
     ] });
-    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
+    this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [
+      new PrivateRouteMiddleware(),
+      new ValidateDtoMiddleware(CreateOfferDto)] });
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
     this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [
+      new PrivateRouteMiddleware(),
       new ValidateObjectIdMiddleware('offerId'),
       new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
     ] });
     this.addRoute({ path: '/:offerId', method: HttpMethod.Patch, handler: this.update, middlewares: [
+      new PrivateRouteMiddleware(),
       new ValidateObjectIdMiddleware('offerId'),
       new ValidateDtoMiddleware(UpdateOfferDto),
       new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
