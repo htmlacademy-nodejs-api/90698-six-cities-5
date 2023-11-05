@@ -10,7 +10,7 @@ export class CreateCommentDto {
   @IsMongoId({ message: CreateCommentMessages.offerId.invalidFormat })
   public offerId: string;
 
-  @IsMongoId({ message: CreateCommentMessages.userId.invalidFormat })
+
   public userId: string;
 
 }
