@@ -27,6 +27,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop()
   public userType: UserType;
 
+
   constructor(userData: User) {
     super();
 

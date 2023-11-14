@@ -6,13 +6,15 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { DEFAULT_OFFER_COUNT } from './offer.constant.js';
+import { DEFAULT_OFFER_COUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
+import { UserEntity } from '../user/user.entity.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
+    @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
+    @inject(Component.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) {}
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
@@ -27,6 +29,49 @@ export class DefaultOfferService implements OfferService {
       .findById(offerId)
       .populate(['userId'])
       .exec();
+  }
+
+  public async getDetailedOffer(offerId: string, userId?: string): Promise<DocumentType<OfferEntity> | null> {
+    let result = await this.offerModel.aggregate<DocumentType<OfferEntity>>([
+      { $match: { $expr: { $eq: [offerId, { $toString: '$_id'}] } } },
+      {
+        $lookup: {
+          from: 'users',
+          pipeline: [
+            { $match: { $expr: { $eq: [userId, { $toString: '$_id'}] } } },
+            { $project: {_id: false, favorites: true}}
+          ],
+          as: 'user'
+        }
+      },
+      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+        $addFields: {
+          isFavorite: {
+            $cond:
+              [
+                {$and:
+                  [
+                    {$ne: [{ $type: '$user.favorites'}, 'missing']},
+                    {$in: ['$_id', '$user.favorites']}
+                  ]
+                },
+                true,
+                false
+              ]
+          },
+          id: { $toString: '$_id'}
+        }
+      },
+      { $unset: 'user' },
+    ]).exec();
+    result = await this.offerModel.populate(result, {path: 'userId'});
+    const offer = result[0];
+    return offer;
+  }
+
+  public async findByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.find({ city }).populate('userId').exec();
   }
 
   public async find(): Promise<DocumentType<OfferEntity>[]> {
@@ -84,6 +129,46 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
+  public async findPremium(city: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .find({ city, isPremium: true })
+      .populate('userId')
+      .limit(PREMIUM_OFFER_AMOUNT)
+      .sort({ createdAt: SortType.Down })
+      .exec();
+  }
+
+  public async findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          let: { userId: { $toObjectId: userId } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$userId'] } } },
+            { $project: { _id: 0, favorites: 1 } },
+          ],
+          as: 'users',
+        },
+      },
+      {
+        $addFields: {
+          user: { $arrayElemAt: ['$users', 0] },
+        },
+      },
+      {
+        $unset: ['users'],
+      },
+      {
+        $match: {
+          $expr: {
+            $in: ['$_id', '$user.favorites'],
+          },
+        },
+      },
+    ]).exec();
+  }
+
   public async exists(documentId: string): Promise<boolean> {
     return (await this.offerModel
       .exists({_id: documentId})) !== null;
@@ -94,5 +179,19 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, {'$inc': {
         commentCount: 1,
       }}).exec();
+  }
+
+  public async addFavorite(offerId: string, userId: string): Promise<void> {
+    await this.userModel.updateOne(
+      {_id: userId},
+      { $addToSet: { favorites: offerId } }
+    );
+  }
+
+  public async deleteFavorite(offerId: string, userId: string): Promise<void> {
+    await this.userModel.updateOne(
+      {_id: userId},
+      { $pull: { favorites: offerId } }
+    );
   }
 }

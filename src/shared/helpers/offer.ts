@@ -1,4 +1,4 @@
-import { Offer, OfferType, Comfort } from '../types/index.js';
+import { Offer, OfferType, Comfort, City } from '../types/index.js';
 
 export function createOffer(offerData: string): Offer {
   const [
@@ -20,14 +20,15 @@ export function createOffer(offerData: string): Offer {
     email,
     avatarPath,
     userType,
-    coordinates
+    latitude,
+    longitude
   ] = offerData.replace('\n', '').split('\t');
 
   return {
     title,
     description,
     postDate: new Date(postData),
-    city,
+    city: City[city as 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam'| 'Hamburg'| 'Dusseldorf'],
     preview,
     image,
     premium: premium === 'true',
@@ -41,6 +42,7 @@ export function createOffer(offerData: string): Offer {
       .map((comforts) => Comfort[comforts as 'Breakfast' | 'AirConditioning' | 'LaptopFriendlyWorkspace' | 'BabySeat' | 'Washer' | 'Towels' | 'Fridge']),
     user: { firstname, email, avatarPath, userType },
     commentCount: 0,
-    coordinates,
+    latitude: Number.parseFloat(latitude),
+    longitude: Number.parseFloat(longitude),
   };
 }

@@ -1,1 +1,12 @@
 export const DEFAULT_OFFER_COUNT = 60;
+export const PREMIUM_OFFER_AMOUNT = 3;
+export const MIN_TITLE = 10;
+export const MAX_TITLE = 100;
+export const MIN_DESCRIPTION = 20;
+export const MAX_DESCRIPTION = 1024;
+export const MIN_ROOM = 1;
+export const MAX_ROOM = 8;
+export const MIN_GUEST = 1;
+export const MAX_GUEST = 10;
+export const MIN_PRICE = 100;
+export const MAX_PRICE = 100000;

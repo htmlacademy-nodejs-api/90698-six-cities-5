@@ -1,5 +1,5 @@
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
-import { OfferType, Comfort } from '../../types/index.js';
+import { OfferType, Comfort, City } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -21,8 +21,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public postDate!: Date;
 
-  @prop({required: true})
-  public city!: string;
+  @prop({
+    type: () => String,
+    enum: City
+  })
+  public city!: City;
 
   @prop({required: true})
   public preview!: string;
@@ -71,7 +74,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public commentCount!: number;
 
   @prop({required: true})
-  public coordinates!: string;
+  public latitude!: number;
+
+  @prop({required: true})
+  public longitude!: number;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

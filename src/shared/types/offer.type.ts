@@ -1,12 +1,13 @@
 import { OfferType } from './offer-type.enum.js';
 import { Comfort } from './comfort-type.enum.js';
 import { User } from './user.type.js';
+import { City } from './city-type.enum.js';
 
 export type Offer = {
   title: string;
   description: string;
   postDate: Date;
-  city: string;
+  city: City;
   preview: string;
   image: string;
   premium: boolean;
@@ -19,6 +20,7 @@ export type Offer = {
   comfort: Comfort[];
   user: User;
   commentCount: number;
-  coordinates: string;
+  latitude: number;
+  longitude: number;
 
 }
