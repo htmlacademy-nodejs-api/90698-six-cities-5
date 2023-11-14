@@ -25,10 +25,7 @@ export class OfferController extends BaseController {
 
     this.logger.info('Register routes for OfferController…');
 
-    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.show, middlewares: [
-      new ValidateObjectIdMiddleware('offerId'),
-      new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-    ] });
+    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
 
     this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create, middlewares: [
       new PrivateRouteMiddleware(),
@@ -41,7 +38,10 @@ export class OfferController extends BaseController {
       middlewares: [new PrivateRouteMiddleware()]
     });
 
-    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.show, middlewares: [
+      new ValidateObjectIdMiddleware('offerId'),
+      new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+    ] });
 
     this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [
       new PrivateRouteMiddleware(),
@@ -84,6 +84,7 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
+
     this.addRoute({
       path: '/premium/:cityName',
       method: HttpMethod.Get,

@@ -189,6 +189,75 @@ paths:
               schema:
                 $ref: "#/components/schemas/offer"
 
+  /offers/favorites:
+    get:
+      tags:
+        - offers
+        - users
+      summary: Список избранных офферов.
+      description: Только для авторизованных юзеров. Список офферов, добавленных юзером в список избранное.
+      responses:
+        "200":
+          description: Список избранныех офферов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offers'
+        "401":
+          description: Требуется авторизация
+
+  /offers/{offerId}/favorites:
+    post:
+      tags:
+        - offers
+        - users
+      summary: Добавление оффера в число избранных.
+      description: Добавляет `offerId` в массив `user.favorites`. Только для авторизованных юзеров.
+      responses:
+        "204":
+          description: Оффер успешно добавлен
+        "400":
+          description: Невалидный offerId
+        "401":
+          description: Требуется авторизация
+        "404":
+          description: Оффер с указанным ID не найден
+
+    delete:
+      tags:
+        - offers
+        - users
+      summary: Удаление оффера из числа избранных.
+      description: Удаляет `offerId` из массива `user.favorites`. Только для авторизованных юзеров.
+      responses:
+        "204":
+          description: Оффер успешно удален
+        "400":
+          description: Невалидный offerId
+        "401":
+          description: Требуется авторизация
+        "404":
+          description: Оффер с указанным ID не найден
+
+  /offers/{cityId}/premiums:
+    get:
+        tags:
+          - offers
+        summary: Список премиальных офферов
+        description: Возвращает не больше 3 офферов для указанного города с флагом Premium.
+        responses:
+          "200":
+            description: Список премиумных офферов
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/offers'
+          "404":
+            description: Город с указанным id не найден
 
   /comments/{offerId}:
     get:
@@ -221,7 +290,7 @@ paths:
         required: true
 
       responses:
-        "200":
+        "201":
           description: Комментарий успешно создан.
           content:
             application/json:
@@ -496,14 +565,13 @@ components:
         text:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        commentDate:
-          type: string
-          format: date-time
-          example: 01/01/2023T12:23:34.843Z
         rating:
           type: number
           example: 4
-        authorId:
+        offerId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        userId:
           type: string
           example: sdfsdf2343sdfsdfs
 
@@ -515,14 +583,13 @@ components:
         text:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        commentDate:
-          type: string
-          format: date-time
-          example: 01/01/2023T12:23:34.843Z
         rating:
           type: number
           example: 4
-        authorId:
+        offerId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        userId:
           type: string
           example: sdfsdf2343sdfsdfs
 

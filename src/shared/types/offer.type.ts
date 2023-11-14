@@ -11,7 +11,6 @@ export type Offer = {
   preview: string;
   image: string;
   premium: boolean;
-  favourites: boolean;
   rating: number;
   type: OfferType;
   room: number;

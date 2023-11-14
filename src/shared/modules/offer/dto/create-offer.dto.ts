@@ -25,15 +25,14 @@ export class CreateOfferDto {
   @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
   public premium: boolean;
 
-  @IsBoolean({ message: CreateOfferValidationMessage.favourites.invalidFormat })
-  public favourites: boolean;
-
   @IsEnum(OfferType, { message: CreateOfferValidationMessage.type.invalid })
   public type: OfferType;
 
   @Min(MIN_ROOM, { message: CreateOfferValidationMessage.room.invalidValue })
   @Max(MAX_ROOM, { message: CreateOfferValidationMessage.room.invalidValue })
   public room: number;
+
+  public rating: number;
 
   @Min(MIN_GUEST, { message: CreateOfferValidationMessage.guests.minValue })
   @Max(MAX_GUEST, { message: CreateOfferValidationMessage.guests.maxValue })

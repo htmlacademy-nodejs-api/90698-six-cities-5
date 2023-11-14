@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Length, IsEnum } from 'class-validator';
+import { IsEmail, IsString, Length, IsEnum, IsOptional } from 'class-validator';
 import { CreateUserMessages } from './create-user.messages.js';
 import { UserType } from '../../../types/user-type.enum.js';
 
@@ -11,6 +11,7 @@ export class CreateUserDto {
   @IsEmail({}, { message: CreateUserMessages.email.invalidFormat })
   public email: string;
 
+  @IsOptional()
   @IsString({ message: CreateUserMessages.avatarPath.invalidFormat })
   public avatarPath: string;
 

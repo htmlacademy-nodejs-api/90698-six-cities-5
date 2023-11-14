@@ -47,7 +47,7 @@ export class DefaultOfferService implements OfferService {
       { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
       {
         $addFields: {
-          isFavorite: {
+          favorite: {
             $cond:
               [
                 {$and:
@@ -131,7 +131,7 @@ export class DefaultOfferService implements OfferService {
 
   public async findPremium(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({ city, isPremium: true })
+      .find({ city, premium: true })
       .populate('userId')
       .limit(PREMIUM_OFFER_AMOUNT)
       .sort({ createdAt: SortType.Down })
