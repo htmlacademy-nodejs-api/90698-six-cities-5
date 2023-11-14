@@ -12,7 +12,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiL
 {
   "title": "RRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
   "description": "New description New description New description New description",
-  "postDate": "9999-12-31 23:59:59",
   "city": "Cologne",
   "preview": "av1.png",
   "image": "av2.png",
@@ -50,10 +49,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiL
   "description": "Дом как дом Дом как домДом как домДом как домДом как дом",
   "price": 100
 }
-
-###
-## Список комментариев к объявлению
-GET http://localhost:4000/offers/65530e30a6380c83ba723099/comments HTTP/1.1
 
 ###
 ## Добавить в избранное

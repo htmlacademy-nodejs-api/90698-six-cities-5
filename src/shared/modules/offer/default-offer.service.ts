@@ -24,6 +24,48 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
+  public async find(): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'comments',
+            let: { offerId: '$_id' },
+            pipeline: [
+              { $match: { $expr: { $in: ['$$offerId', '$offers'] } } },
+              { $project: { _id: 1 } },
+            ],
+            as: 'comments',
+          }
+        },
+        {
+          $addFields: {
+            id: { $toString: '$_id' },
+            commentsCount: { $size: '$comments' },
+            rating: {
+              $divide: [
+                {
+                  $reduce: {
+                    input: '$comments',
+                    initialValue: 0,
+                    in: {
+                      $add: ['$$value', '$$this.rating'],
+                    },
+                  },
+                },
+                {
+                  $cond: [{ $ne: [{ $size: '$comments' }, 0] }, { $size: '$comments' }, 1],
+                },
+              ],
+            },
+          },
+        },
+        { $unset: 'comments' },
+        { $limit: DEFAULT_OFFER_COUNT },
+        { $sort: { commentsCount: SortType.Down } },
+      ]).exec();
+  }
+
   public async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
@@ -72,48 +114,6 @@ export class DefaultOfferService implements OfferService {
 
   public async findByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.find({ city }).populate('userId').exec();
-  }
-
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel
-      .aggregate([
-        {
-          $lookup: {
-            from: 'comments',
-            let: { offerId: '$_id' },
-            pipeline: [
-              { $match: { $expr: { $in: ['$$offerId', '$offers'] } } },
-              { $project: { _id: 1 } },
-            ],
-            as: 'comments',
-          }
-        },
-        {
-          $addFields: {
-            id: { $toString: '$_id' },
-            commentsCount: { $size: '$comments' },
-            rating: {
-              $divide: [
-                {
-                  $reduce: {
-                    input: '$comments',
-                    initialValue: 0,
-                    in: {
-                      $add: ['$$value', '$$this.rating'],
-                    },
-                  },
-                },
-                {
-                  $cond: [{ $ne: [{ $size: '$comments' }, 0] }, { $size: '$comments' }, 1],
-                },
-              ],
-            },
-          },
-        },
-        { $unset: 'comments' },
-        { $limit: DEFAULT_OFFER_COUNT },
-        { $sort: { commentsCount: SortType.Down } },
-      ]).exec();
   }
 
   public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {

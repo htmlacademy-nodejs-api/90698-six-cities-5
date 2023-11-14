@@ -241,7 +241,7 @@ paths:
         "404":
           description: Оффер с указанным ID не найден
 
-  /offers/{cityId}/premiums:
+  /offers/premium/:cityName:
     get:
         tags:
           - offers
