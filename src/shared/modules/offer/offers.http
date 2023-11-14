@@ -1,18 +1,19 @@
 # Список предложений
-## Получить список предложений
+## Получить список предложений (могут все)
 GET http://localhost:4000/offers HTTP/1.1
 Content-Type: application/json
 
 ###
-## Добавить новое предложение
+## Добавить новое предложение (только авторизованные)
 POST http://localhost:4000/offers HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrMTIzIiwiaWQiOiI2NTUzMGRmZWE2MzgwYzgzYmE3MjMwOTYiLCJpYXQiOjE2OTk5NDE5MDIsImV4cCI6MTcwMDExNDcwMn0.6GwM3YDm2za2YyXCrbztA1MM6pe_iiZeHe3euvWDvNM
 
 {
-  "title": "New house new offer",
+  "title": "RRRRRRRRRRRRRRRRRRRRRRRRRRRRR",
   "description": "New description New description New description New description",
   "postDate": "9999-12-31 23:59:59",
-  "city": "Paris",
+  "city": "Cologne",
   "preview": "av1.png",
   "image": "av2.png",
   "premium": false,
@@ -21,27 +22,28 @@ Content-Type: application/json
   "room": 3,
   "guests": 4,
   "price": 12000,
-  "comfort": "Breakfast",
-  "userId": "6524ee0296cb050c23160a7a",
-  "coordinates": 1245666468
-
+  "comfort": ["Breakfast"],
+  "latitude": 10,
+  "longitude": 21
 }
 
 ###
-# Получить объявление по идентификатору
-GET http://localhost:4000/offers/6524ee556a3909e6a88e62fb HTTP/1.1
+# Получить детальную информацию по предложению (могут все)
+GET http://localhost:4000/offers/65530e30a6380c83ba723099 HTTP/1.1
 
 ###
 
-## Удалить объявление по идентификатору
+## Удалить объявление по идентификатору (только свои)
 
-DELETE http://localhost:4000/offers/62825028a75295825778ac80 HTTP/1.1
-
+DELETE http://localhost:4000/offers/655277d8ae348b9b8fb3a17f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvZ25zQG92ZXJsb29rLm5ldCIsImZpcnN0bmFtZSI6IkphY2sxMjMiLCJpZCI6IjY1NTI2YzZkNmQ4NTU2ODYyMGE0MDVjOSIsImlhdCI6MTY5OTkwMjAxNCwiZXhwIjoxNzAwMDc0ODE0fQ.eHcDoEi6SU8ls83mjyQ-Axta6sP5qHnOeHxCvtpM4fU
 ###
-## Обновить объявление
 
-PATCH http://localhost:4000/offers/6524ee556a3909e6a88e62fb HTTP/1.1
+## Обновить объявление (только свои)
+
+PATCH http://localhost:4000/offers/65530e30a6380c83ba723099 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrMTIzIiwiaWQiOiI2NTUzMGRmZWE2MzgwYzgzYmE3MjMwOTYiLCJpYXQiOjE2OTk5NDE5MDIsImV4cCI6MTcwMDExNDcwMn0.6GwM3YDm2za2YyXCrbztA1MM6pe_iiZeHe3euvWDvNM
 
 {
   "title": "Дом Дом Дом Дом",
@@ -51,6 +53,29 @@ Content-Type: application/json
 
 ###
 ## Список комментариев к объявлению
-GET http://localhost:4000/offers/6524ee556a3909e6a88e62fb/comments HTTP/1.1
+GET http://localhost:4000/offers/65530e30a6380c83ba723099/comments HTTP/1.1
 
+###
+## Добавить в избранное
+POST http://localhost:4000/offers/65530e30a6380c83ba723099/favorites HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvZ25zcXFxcXFxQG92ZXJsb29rLm5ldCIsImZpcnN0bmFtZSI6IkphY2sxMjMiLCJpZCI6IjY1NTI3YTI0YWUzNDhiOWI4ZmIzYTE4YiIsImlhdCI6MTY5OTkwNjE3MywiZXhwIjoxNzAwMDc4OTczfQ.zmGXmz0Q6d1GKqcXC5MBcYmQiXSEeqME8XbJm1YmdLM
+###
+
+## Удалить из избранного
+DELETE http://localhost:4000/offers/6524ee556a3909e6a88e6300/favorites HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvZ25zcXFxcXFxQG92ZXJsb29rLm5ldCIsImZpcnN0bmFtZSI6IkphY2sxMjMiLCJpZCI6IjY1NTI3YTI0YWUzNDhiOWI4ZmIzYTE4YiIsImlhdCI6MTY5OTkwNjE3MywiZXhwIjoxNzAwMDc4OTczfQ.zmGXmz0Q6d1GKqcXC5MBcYmQiXSEeqME8XbJm1YmdLM
+###
+
+## Получить список избранных офферов для юзера
+
+GET http://localhost:4000/offers/favorites
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvZ25zcXFxcXFxQG92ZXJsb29rLm5ldCIsImZpcnN0bmFtZSI6IkphY2sxMjMiLCJpZCI6IjY1NTI3YTI0YWUzNDhiOWI4ZmIzYTE4YiIsImlhdCI6MTY5OTkwNjE3MywiZXhwIjoxNzAwMDc4OTczfQ.zmGXmz0Q6d1GKqcXC5MBcYmQiXSEeqME8XbJm1YmdLM
+
+###
+
+## Получить список премиум офферов для заданного города. (не больше 3 штук)
+GET http://localhost:4000/offers/premium/paris
 ###

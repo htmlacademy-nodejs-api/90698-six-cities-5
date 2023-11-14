@@ -12,3 +12,7 @@ export * from './middleware/validate-objectid.middleware.js';
 export * from './middleware/validate-dto.middleware.js';
 export * from './middleware/document-exists.middleware.js';
 export * from './middleware/upload-file.middleware.js';
+export * from './middleware/parse-token.middleware.js';
+export * from './middleware/private-route.middleware.js';
+export * from './middleware/validate-cityname.middleware.js';
+export * from './middleware/user-access.middleware.js';

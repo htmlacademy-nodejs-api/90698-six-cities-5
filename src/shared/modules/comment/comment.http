@@ -1,13 +1,17 @@
 # Комментарии
-## Создать комментарий
+### Получить список комментариев к офферу по id оффера
+GET http://localhost:4000/comments/6524ee556a3909e6a88e6300 HTTP/1.1
+###
 
-POST http://localhost:5000/comments HTTP/1.1
+
+## Добавить комментарий к офферу по id оффера
+POST http://localhost:4000/comments/6524ee556a3909e6a88e6300 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvZ25zcXFxcXFxQG92ZXJsb29rLm5ldCIsImZpcnN0bmFtZSI6IkphY2sxMjMiLCJpZCI6IjY1NTI3YTI0YWUzNDhiOWI4ZmIzYTE4YiIsImlhdCI6MTY5OTkwNjU3NCwiZXhwIjoxNzAwMDc5Mzc0fQ.6jZPtu9NlTFBSqTzgPigzvj-bSpErllvZSVJ70AuALo
 
 {
-  "text": "Как обстоят дела с коробками? Фирменная упаковка сохранена?",
-  "offerId": "6524ee556a3909e6a88e62fb",
-  "userId": "6524ee0296cb050c23160a7a"
+"text": "ЕЩЕ ОДИН комментарий от Томаса с рейтингом равным 2",
+  "rating": 5
 }
 
 ###

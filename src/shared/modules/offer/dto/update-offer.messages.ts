@@ -13,11 +13,11 @@ export const CreateUpdateOfferMessage = {
   premium: {
     invalidFormat: 'Field premium must be boolean',
   },
-  favourites: {
-    invalidFormat: 'Field favourites must be boolean',
-  },
   offerType: {
     invalid: 'type must be Apartment or House or Room or Hotel',
+  },
+  city: {
+    invalid: 'type must be Paris or ',
   },
   room: {
     invalidValue: 'Minimum room is 1 and Maximum room is 8',

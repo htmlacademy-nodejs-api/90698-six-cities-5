@@ -112,7 +112,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/offers"
-        "400":
+        "404":
           description: Список предложений пуст. Ошибка запроса.
     post:
       tags:
@@ -126,6 +126,7 @@ paths:
             schema:
               $ref: "#/components/schemas/createdOffer"
         required: true
+
       responses:
         "201":
           description: Предложение об аренде успешно создано.
@@ -133,7 +134,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/offer"
-        "403":
+        "401":
           description: Создавать предложения об аренде могут только авторизованные пользователи.
 
   /offers/{offerId}:
@@ -159,6 +160,8 @@ paths:
                 $ref: "#/components/schemas/offer"
         "403":
           description: Редактировать можно только свои предложения.
+        "401":
+          description: Редактировать предложения об аренде могут только авторизованные пользователи.
 
     delete:
       tags:
@@ -186,6 +189,75 @@ paths:
               schema:
                 $ref: "#/components/schemas/offer"
 
+  /offers/favorites:
+    get:
+      tags:
+        - offers
+        - users
+      summary: Список избранных офферов.
+      description: Только для авторизованных юзеров. Список офферов, добавленных юзером в список избранное.
+      responses:
+        "200":
+          description: Список избранныех офферов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offers'
+        "401":
+          description: Требуется авторизация
+
+  /offers/{offerId}/favorites:
+    post:
+      tags:
+        - offers
+        - users
+      summary: Добавление оффера в число избранных.
+      description: Добавляет `offerId` в массив `user.favorites`. Только для авторизованных юзеров.
+      responses:
+        "204":
+          description: Оффер успешно добавлен
+        "400":
+          description: Невалидный offerId
+        "401":
+          description: Требуется авторизация
+        "404":
+          description: Оффер с указанным ID не найден
+
+    delete:
+      tags:
+        - offers
+        - users
+      summary: Удаление оффера из числа избранных.
+      description: Удаляет `offerId` из массива `user.favorites`. Только для авторизованных юзеров.
+      responses:
+        "204":
+          description: Оффер успешно удален
+        "400":
+          description: Невалидный offerId
+        "401":
+          description: Требуется авторизация
+        "404":
+          description: Оффер с указанным ID не найден
+
+  /offers/{cityId}/premiums:
+    get:
+        tags:
+          - offers
+        summary: Список премиальных офферов
+        description: Возвращает не больше 3 офферов для указанного города с флагом Premium.
+        responses:
+          "200":
+            description: Список премиумных офферов
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/offers'
+          "404":
+            description: Город с указанным id не найден
 
   /comments/{offerId}:
     get:
@@ -218,14 +290,14 @@ paths:
         required: true
 
       responses:
-        "200":
+        "201":
           description: Комментарий успешно создан.
           content:
             application/json:
               schema:
                 type: object
                 $ref: "#/components/schemas/comments"
-        "403":
+        "401":
           description: Создавать комментарии могут только авторизованные пользователи.
 
 components:
@@ -268,7 +340,7 @@ components:
         description:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        offerDate:
+        postDate:
           type: string
           format: date-time
           example: 01/01/2023T12:23:34.843Z
@@ -276,18 +348,18 @@ components:
           type: string
           enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
           example: Amsterdam
-        previewImageURL:
+        preview:
           type: string
           example: https://www.domain.com/image.png
-        images:
+        image:
           type: array
           items:
             type: string
           example: [https://www.domain.com/image1.png, https://www.domain.com/image.jpg', https://www.domain.com/image3.png]
-        isPremium:
+        premium:
           type: boolean
           example: true
-        isFavorite:
+        favorite:
           type: boolean
           example: false
         rating:
@@ -295,34 +367,32 @@ components:
           example: 3
         type:
           type: string
-          enum: [apartment, house, room, hotel]
-          example: house
-        bedrooms:
+          enum: [Apartment, House, Room, Hotel]
+          example: House
+        room:
           type: number
           example: 1
-        maxAdults:
+        guests:
           type: number
           example: 3
         price:
           type: number
           example: 1000
-        goods:
+        comfort:
           type: array
           items:
             type: string
             enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
           example: [Breakfast, Air conditioning]
-        hostId:
-          type: string
-          example: sdfsdf2343sdfsdfs
-        reviews:
+        commentCount:
           type: number
           example: 12
-        coordinates:
-          type: array
-          items:
-            type: number
-          example: [52.370216, 4.895168]
+        latitude:
+          type: number
+          example: 52.370216
+        longitude:
+          type: number
+          example: 52.370216
 
     offers:
       type: array
@@ -332,7 +402,7 @@ components:
           title:
             type: string
             example: Lorem ipsum dolor sit amet.
-          offerDate:
+          postDate:
             type: string
             format: date-time
             example: 01/01/2023T12:23:34.843Z
@@ -340,13 +410,13 @@ components:
             type: string
             enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
             example: Amsterdam
-          previewImageURL:
+          preview:
             type: string
             example: 'https://www.domain.com/image.png'
-          isPremium:
+          premium:
             type: boolean
             example: true
-          isFavorite:
+          favorite:
             type: boolean
             example: false
           rating:
@@ -354,12 +424,12 @@ components:
             example: 3
           type:
             type: string
-            enum: [apartment, house, room, hotel]
-            example: house
+            enum: [Apartment, House, Room, Hotel]
+            example: House
           price:
             type: number
             example: 1000
-          reviews:
+          commentCount:
             type: number
             example: 12
 
@@ -372,7 +442,7 @@ components:
         description:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        offerDate:
+        postDate:
           type: string
           format: date-time
           example: 01/01/2023T12:23:34.843Z
@@ -380,18 +450,18 @@ components:
           type: string
           enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
           example: Amsterdam
-        previewImageURL:
+        preview:
           type: string
-          example: 'https://www.domain.com/image.png'
-        images:
+          example: https://www.domain.com/image.png
+        image:
           type: array
           items:
             type: string
           example: [https://www.domain.com/image1.png, https://www.domain.com/image.jpg', https://www.domain.com/image3.png]
-        isPremium:
+        premium:
           type: boolean
           example: true
-        isFavorite:
+        favorite:
           type: boolean
           example: false
         rating:
@@ -399,34 +469,32 @@ components:
           example: 3
         type:
           type: string
-          enum: [apartment, house, room, hotel]
-          example: house
-        bedrooms:
+          enum: [Apartment, House, Room, Hotel]
+          example: House
+        room:
           type: number
           example: 1
-        maxAdults:
+        guests:
           type: number
           example: 3
         price:
           type: number
           example: 1000
-        goods:
+        comfort:
           type: array
           items:
             type: string
             enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
           example: [Breakfast, Air conditioning]
-        hostId:
-          type: string
-          example: sdfsdf2343sdfsdfs
-        reviews:
+        commentCount:
           type: number
           example: 12
-        coordinates:
-          type: array
-          items:
-            type: number
-          example: [52.370216, 4.895168]
+        latitude:
+          type: number
+          example: 52.370216
+        longitude:
+          type: number
+          example: 52.370216
 
     updateOffer:
       type: object
@@ -437,7 +505,7 @@ components:
         description:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        offerDate:
+        postDate:
           type: string
           format: date-time
           example: 01/01/2023T12:23:34.843Z
@@ -445,18 +513,18 @@ components:
           type: string
           enum: [Paris, Amsterdam, Cologne, Brussels, Dusseldorf, Hamburg]
           example: Amsterdam
-        previewImageURL:
+        preview:
           type: string
           example: https://www.domain.com/image.png
-        images:
+        image:
           type: array
           items:
             type: string
           example: [https://www.domain.com/image1.png, https://www.domain.com/image.jpg', https://www.domain.com/image3.png]
-        isPremium:
+        premium:
           type: boolean
           example: true
-        isFavorite:
+        favorite:
           type: boolean
           example: false
         rating:
@@ -464,34 +532,32 @@ components:
           example: 3
         type:
           type: string
-          enum: [apartment, house, room, hotel]
-          example: house
-        bedrooms:
+          enum: [Apartment, House, Room, Hotel]
+          example: House
+        room:
           type: number
           example: 1
-        maxAdults:
+        guests:
           type: number
           example: 3
         price:
           type: number
           example: 1000
-        goods:
+        comfort:
           type: array
           items:
             type: string
             enum: [Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge]
           example: [Breakfast, Air conditioning]
-        hostId:
-          type: string
-          example: sdfsdf2343sdfsdfs
-        reviews:
+        commentCount:
           type: number
           example: 12
-        coordinates:
-          type: array
-          items:
-            type: number
-          example: [52.370216, 4.895168]
+        latitude:
+          type: number
+          example: 52.370216
+        longitude:
+          type: number
+          example: 52.370216
 
     createComment:
       type: object
@@ -499,14 +565,13 @@ components:
         text:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        commentDate:
-          type: string
-          format: date-time
-          example: 01/01/2023T12:23:34.843Z
         rating:
           type: number
           example: 4
-        authorId:
+        offerId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        userId:
           type: string
           example: sdfsdf2343sdfsdfs
 
@@ -518,14 +583,13 @@ components:
         text:
           type: string
           example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        commentDate:
-          type: string
-          format: date-time
-          example: 01/01/2023T12:23:34.843Z
         rating:
           type: number
           example: 4
-        authorId:
+        offerId:
+          type: string
+          example: sdfsdf2343sdfsdfs
+        userId:
           type: string
           example: sdfsdf2343sdfsdfs
 

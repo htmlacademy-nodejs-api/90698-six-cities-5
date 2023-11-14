@@ -1,51 +1,54 @@
-import { IsArray, IsDateString, IsEnum, IsMongoId, MaxLength, MinLength, IsBoolean, Min, Max } from 'class-validator';
-import { OfferType } from '../../../types/index.js';
+import { IsArray, IsDateString, IsIn, IsEnum, MaxLength, MinLength, IsBoolean, Min, Max } from 'class-validator';
+import { OfferType, City } from '../../../types/index.js';
 import { Comfort } from '../../../types/index.js';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
+import { MAX_DESCRIPTION, MAX_GUEST, MAX_PRICE, MAX_ROOM, MAX_TITLE, MIN_DESCRIPTION, MIN_GUEST, MIN_PRICE, MIN_ROOM, MIN_TITLE } from '../offer.constant.js';
 
 export class CreateOfferDto {
-  @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
-  @MaxLength(100, { message: CreateOfferValidationMessage.title.maxLength })
+  @MinLength(MIN_TITLE, { message: CreateOfferValidationMessage.title.minLength })
+  @MaxLength(MAX_TITLE, { message: CreateOfferValidationMessage.title.maxLength })
   public title: string;
 
-  @MinLength(20, { message: CreateOfferValidationMessage.description.minLength })
-  @MaxLength(1024, { message: CreateOfferValidationMessage.description.maxLength })
+  @MinLength(MIN_DESCRIPTION, { message: CreateOfferValidationMessage.description.minLength })
+  @MaxLength(MAX_DESCRIPTION, { message: CreateOfferValidationMessage.description.maxLength })
   public description: string;
 
   @IsDateString({}, { message: CreateOfferValidationMessage.postDate.invalidFormat })
   public postDate: Date;
 
-  public city: string;
+  @IsEnum(City, { message: CreateOfferValidationMessage.city.invalid })
+  public city: City;
+
   public preview: string;
   public image: string;
 
   @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
   public premium: boolean;
 
-  @IsBoolean({ message: CreateOfferValidationMessage.favourites.invalidFormat })
-  public favourites: boolean;
-
   @IsEnum(OfferType, { message: CreateOfferValidationMessage.type.invalid })
   public type: OfferType;
 
-  @Min(1, { message: CreateOfferValidationMessage.room.invalidValue })
-  @Max(8, { message: CreateOfferValidationMessage.room.invalidValue })
+  @Min(MIN_ROOM, { message: CreateOfferValidationMessage.room.invalidValue })
+  @Max(MAX_ROOM, { message: CreateOfferValidationMessage.room.invalidValue })
   public room: number;
 
-  @Min(1, { message: CreateOfferValidationMessage.guests.minValue })
-  @Max(10, { message: CreateOfferValidationMessage.guests.maxValue })
+  public rating: number;
+
+  @Min(MIN_GUEST, { message: CreateOfferValidationMessage.guests.minValue })
+  @Max(MAX_GUEST, { message: CreateOfferValidationMessage.guests.maxValue })
   public guests: number;
 
-  @Min(100, { message: CreateOfferValidationMessage.price.minValue })
-  @Max(100000, { message: CreateOfferValidationMessage.price.maxValue })
+  @Min(MIN_PRICE, { message: CreateOfferValidationMessage.price.minValue })
+  @Max(MAX_PRICE, { message: CreateOfferValidationMessage.price.maxValue })
   public price: number;
 
   @IsArray({ message: CreateOfferValidationMessage.comfort.invalidFormat })
-  @IsEnum(Comfort, { message: CreateOfferValidationMessage.comfort.invalid })
+  @IsIn(['Breakfast', 'Air conditioning', 'Laptop friendly workspace', 'Baby seat', 'Washer', 'Towels', 'Fridge'], {each: true, message: CreateOfferValidationMessage.comfort.invalid})
   public comfort: Comfort[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.userId.invalidId })
   public userId: string;
 
-  public coordinates: string;
+  public latitude: number;
+
+  public longitude: number;
 }

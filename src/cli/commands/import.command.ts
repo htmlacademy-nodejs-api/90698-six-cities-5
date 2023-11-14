@@ -22,7 +22,7 @@ export class ImportCommand implements Command {
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
     this.logger = new ConsoleLogger();
-    this.offerService = new DefaultOfferService(this.logger, OfferModel);
+    this.offerService = new DefaultOfferService(this.logger, OfferModel, UserModel);
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
@@ -53,14 +53,14 @@ export class ImportCommand implements Command {
       preview: offer.preview,
       image: offer.image,
       premium: offer.premium,
-      favourites: offer.favourites,
       rating: offer.rating,
       type: offer.type,
       room: offer.room,
       guests: offer.guests,
       price: offer.price,
       comfort: offer.comfort,
-      coordinates: offer.coordinates
+      latitude: offer.latitude,
+      longitude: offer.longitude
 
     });
 
