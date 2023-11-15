@@ -5,8 +5,8 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DocumentExists } from '../../types/index.js';
 
 export interface OfferService extends DocumentExists {
-  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   find(): Promise<DocumentType<OfferEntity>[]>;
+  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   findById(offerId: string, userId?: string): Promise<DocumentType<OfferEntity> | null>;
   findByCity(city: string): Promise<DocumentType<OfferEntity>[]>;
   getDetailedOffer(offerId: string, userId?: string): Promise<DocumentType<OfferEntity> | null>;

@@ -1,7 +1,7 @@
-//import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { OfferGenerator } from './offer-generator.interface.js';
-import { MockServerData, OfferType, Comfort, UserType } from '../../types/index.js';
-import { generateRandomValue, getRandomItem } from '../../helpers/index.js';
+import { MockServerData, OfferType, UserType, City } from '../../types/index.js';
+import { generateRandomValue, getRandomItem, getRandomItems} from '../../helpers/index.js';
 
 const MIN_RATING = 1;
 const MAX_RATING = 5;
@@ -21,8 +21,8 @@ const MAX_LONGITUDE = 200;
 const MIN_LATITUDE = 10;
 const MAX_LATITUDE = 100;
 
-//const FIRST_WEEK_DAY = 1;
-//const LAST_WEEK_DAY = 7;
+const FIRST_WEEK_DAY = 1;
+const LAST_WEEK_DAY = 7;
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
@@ -30,7 +30,8 @@ export class TSVOfferGenerator implements OfferGenerator {
   public generate(): string {
     const title = getRandomItem<string>(this.mockData.titles);
     const description = getRandomItem<string>(this.mockData.descriptions);
-    const city = getRandomItem<string>(this.mockData.cities);
+    const postDate = dayjs().subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day').toISOString();
+    const city = getRandomItem(this.mockData.cities) as keyof typeof City;
     const preview = getRandomItem<string>(this.mockData.previews);
     const image = getRandomItem<string>(this.mockData.images);
     const premium = getRandomItem(['true', 'false']);
@@ -39,8 +40,8 @@ export class TSVOfferGenerator implements OfferGenerator {
     const room = generateRandomValue(MIN_ROOM, MAX_ROOM).toString();
     const guests = generateRandomValue(MIN_GUESTS, MAX_GUESTS).toString();
     const price = generateRandomValue(MIN_PRICE, MAX_PRICE).toString();
-    const comfort = getRandomItem([Comfort.AirConditioning, Comfort.BabySeat, Comfort.Breakfast, Comfort.Fridge, Comfort.Washer]);
-    const user = getRandomItem(this.mockData.firstname);
+    const comfort = getRandomItems<string>(this.mockData.comforts).join(';');
+    const firstname = getRandomItem(this.mockData.firstname);
     const email = getRandomItem(this.mockData.emails);
     const avatarPath = getRandomItem(this.mockData.avatarsPath);
     const userType = getRandomItem([UserType.Ordinary, UserType.Pro]);
@@ -49,10 +50,10 @@ export class TSVOfferGenerator implements OfferGenerator {
 
     return [
       title, description,
-      city, preview, image, rating,
-      type, price, room, guests,
-      comfort, email, user, avatarPath,
-      premium, longitude, latitude, userType
+      postDate, city,preview, image, premium, rating,
+      type, room, guests, price,
+      comfort, firstname, email, avatarPath, userType,
+      longitude, latitude,
     ].join('\t');
   }
 }

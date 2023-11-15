@@ -35,19 +35,6 @@
       "apartment-04.jpg",
       "apartment-05.jpg"
     ],
-    "types": [
-      "Apartment",
-      "House",
-      "Room",
-      "Hotel"
-    ],
-    "comforts": [
-      "Breakfast",
-      "Air conditioning",
-      "Laptop friendly workspace",
-      "Baby seat",
-      "Washer"
-    ],
     "firstname": [
       "Иван",
       "Олег",
@@ -69,6 +56,10 @@
       "roland.jpg",
       "smite.jpg",
       "coffee.jpg"
+    ],
+    "comforts": [
+      "Breakfast",
+      "Washer"
     ]
   }
 }

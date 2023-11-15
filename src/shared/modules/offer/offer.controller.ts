@@ -38,6 +38,15 @@ export class OfferController extends BaseController {
       middlewares: [new PrivateRouteMiddleware()]
     });
 
+    this.addRoute({
+      path: '/premium/:cityName',
+      method: HttpMethod.Get,
+      handler: this.showPremium,
+      middlewares: [
+        new ValidateCityNameMiddleware('cityName')
+      ]
+    });
+
     this.addRoute({ path: '/:offerId', method: HttpMethod.Get, handler: this.show, middlewares: [
       new ValidateObjectIdMiddleware('offerId'),
       new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
@@ -77,15 +86,6 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]
-    });
-
-    this.addRoute({
-      path: '/premium/:cityName',
-      method: HttpMethod.Get,
-      handler: this.showPremium,
-      middlewares: [
-        new ValidateCityNameMiddleware('cityName')
       ]
     });
 
@@ -129,6 +129,12 @@ export class OfferController extends BaseController {
     this.noContent(res, offer);
   }
 
+  public async showPremium({ params: { cityName } }: Request<ParamCityName>, res: Response): Promise<void> {
+    const capitalizedCityName = `${cityName.at(0)?.toUpperCase()}${cityName.slice(1)}`;
+    const result = await this.offerService.findPremium(capitalizedCityName);
+    this.ok(res, fillDTO(OfferRdo, result));
+  }
+
   public async findFavoritesByUserId({ tokenPayload: { id: userId } }: Request, res: Response): Promise<void> {
     const offers = await this.offerService.findFavoritesByUserId(userId);
     this.ok(res, fillDTO(OfferRdo, offers));
@@ -142,12 +148,6 @@ export class OfferController extends BaseController {
   public async deleteFavorite({ params: {offerId}, tokenPayload: {id: userId} }: Request<ParamOfferId>, res: Response): Promise<void> {
     await this.offerService.deleteFavorite(offerId, userId);
     this.noContent(res, {});
-  }
-
-  public async showPremium({ params: { cityName } }: Request<ParamCityName>, res: Response): Promise<void> {
-    const capitalizedCityName = `${cityName.at(0)?.toUpperCase()}${cityName.slice(1)}`;
-    const result = await this.offerService.findPremium(capitalizedCityName);
-    this.ok(res, fillDTO(OfferRdo, result));
   }
 
   public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
