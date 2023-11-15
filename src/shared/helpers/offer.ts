@@ -4,7 +4,7 @@ export function createOffer(offerData: string): Offer {
   const [
     title,
     description,
-    postData,
+    createdDate,
     city,
     preview,
     image,
@@ -16,9 +16,9 @@ export function createOffer(offerData: string): Offer {
     price,
     comfort,
     firstname,
-    userType,
     email,
     avatarPath,
+    userType,
     latitude,
     longitude
   ] = offerData.replace('\n', '').split('\t');
@@ -26,8 +26,8 @@ export function createOffer(offerData: string): Offer {
   return {
     title,
     description,
-    postDate: new Date(postData),
-    city: City[city as 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam'| 'Hamburg'| 'Dusseldorf'],
+    postDate: new Date(createdDate),
+    city: City[city as keyof typeof City],
     preview,
     image,
     premium: premium === 'true',
