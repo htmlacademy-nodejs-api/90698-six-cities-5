@@ -14,6 +14,7 @@ export const CreateUpdateOfferMessage = {
     invalidFormat: 'Field premium must be boolean',
   },
   images: {
+    invalidSize: 'images must be 6',
     invalidFormat: 'Field premium must be array',
   },
 
