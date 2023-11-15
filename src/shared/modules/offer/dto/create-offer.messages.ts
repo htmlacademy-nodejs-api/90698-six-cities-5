@@ -22,6 +22,9 @@ export const CreateOfferValidationMessage = {
   city: {
     invalid: 'type must be Paris or....',
   },
+  images: {
+    invalidFormat: 'Field favourites must be array',
+  },
   room: {
     invalidValue: 'Minimum room is 1 and Maximum room is 8',
   },

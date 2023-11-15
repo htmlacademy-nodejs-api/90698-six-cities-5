@@ -568,12 +568,6 @@ components:
         rating:
           type: number
           example: 4
-        offerId:
-          type: string
-          example: sdfsdf2343sdfsdfs
-        userId:
-          type: string
-          example: sdfsdf2343sdfsdfs
 
     comments:
       type: array

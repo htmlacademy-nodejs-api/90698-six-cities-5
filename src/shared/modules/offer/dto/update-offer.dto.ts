@@ -27,7 +27,8 @@ export class UpdateOfferDto {
   public preview?: string;
 
   @IsOptional()
-  public image?: string;
+  @IsArray({ message: CreateUpdateOfferMessage.images.invalidFormat })
+  public image?: string[];
 
   @IsOptional()
   @IsBoolean({ message: CreateUpdateOfferMessage.premium.invalidFormat })

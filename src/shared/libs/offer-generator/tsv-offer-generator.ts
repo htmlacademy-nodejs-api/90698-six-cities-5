@@ -33,7 +33,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const postDate = dayjs().subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day').toISOString();
     const city = getRandomItem(this.mockData.cities) as keyof typeof City;
     const preview = getRandomItem<string>(this.mockData.previews);
-    const image = getRandomItem<string>(this.mockData.images);
+    const image = getRandomItems<string>(this.mockData.images).join(';');
     const premium = getRandomItem(['true', 'false']);
     const rating = generateRandomValue(MIN_RATING, MAX_RATING).toString();
     const type = getRandomItem([OfferType.Apartment, OfferType.House, OfferType.Room, OfferType.Hotel]);
