@@ -22,7 +22,7 @@ export class DetailOfferRdo {
   public preview: string;
 
   @Expose()
-  public image: string[];
+  public images: string[];
 
   @Expose()
   public premium: boolean;

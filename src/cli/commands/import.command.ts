@@ -51,7 +51,7 @@ export class ImportCommand implements Command {
       postDate: offer.postDate,
       city: offer.city,
       preview: offer.preview,
-      image: offer.image,
+      images: offer.images,
       premium: offer.premium,
       rating: offer.rating,
       type: offer.type,

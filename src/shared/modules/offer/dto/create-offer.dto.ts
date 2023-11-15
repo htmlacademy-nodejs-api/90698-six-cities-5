@@ -25,7 +25,7 @@ export class CreateOfferDto {
   @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
   @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
-  public image: string[];
+  public images: string[];
 
   @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
   public premium: boolean;
