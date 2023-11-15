@@ -29,7 +29,7 @@ export function createOffer(offerData: string): Offer {
     postDate: new Date(createdDate),
     city: City[city as keyof typeof City],
     preview,
-    image,
+    image:image.split(';'),
     premium: premium === 'true',
     rating: Number.parseFloat(rating),
     type: OfferType[type as 'Apartment' | 'House' | 'Room' | 'Hotel'],

@@ -13,6 +13,10 @@ export const CreateUpdateOfferMessage = {
   premium: {
     invalidFormat: 'Field premium must be boolean',
   },
+  images: {
+    invalidFormat: 'Field premium must be array',
+  },
+
   offerType: {
     invalid: 'type must be Apartment or House or Room or Hotel',
   },

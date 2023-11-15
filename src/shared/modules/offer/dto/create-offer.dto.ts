@@ -21,7 +21,9 @@ export class CreateOfferDto {
   public city: City;
 
   public preview: string;
-  public image: string;
+
+  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
+  public image: string[];
 
   @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
   public premium: boolean;
