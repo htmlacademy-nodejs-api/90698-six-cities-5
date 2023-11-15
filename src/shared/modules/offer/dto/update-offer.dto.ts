@@ -30,7 +30,7 @@ export class UpdateOfferDto {
   @ArrayMinSize(6, { message: CreateUpdateOfferMessage.images.invalidSize })
   @ArrayMaxSize(6, { message: CreateUpdateOfferMessage.images.invalidSize })
   @IsArray({ message: CreateUpdateOfferMessage.images.invalidFormat })
-  public image?: string[];
+  public images?: string[];
 
   @IsOptional()
   @IsBoolean({ message: CreateUpdateOfferMessage.premium.invalidFormat })

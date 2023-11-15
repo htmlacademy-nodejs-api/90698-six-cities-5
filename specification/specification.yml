@@ -351,7 +351,7 @@ components:
         preview:
           type: string
           example: https://www.domain.com/image.png
-        image:
+        images:
           type: array
           items:
             type: string
@@ -453,7 +453,7 @@ components:
         preview:
           type: string
           example: https://www.domain.com/image.png
-        image:
+        images:
           type: array
           items:
             type: string
@@ -516,7 +516,7 @@ components:
         preview:
           type: string
           example: https://www.domain.com/image.png
-        image:
+        images:
           type: array
           items:
             type: string
