@@ -1,5 +1,5 @@
 import { City, Comfort, OfferType } from '../../../types/index.js';
-import { IsDateString, IsEnum, IsOptional, Max, MaxLength, Min, MinLength, IsBoolean, IsArray, IsIn} from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, ArrayMinSize, ArrayMaxSize, Max, MaxLength, Min, MinLength, IsBoolean, IsArray, IsIn} from 'class-validator';
 import { CreateUpdateOfferMessage } from './update-offer.messages.js';
 import { MAX_DESCRIPTION, MAX_GUEST, MAX_PRICE, MAX_TITLE, MIN_DESCRIPTION, MIN_GUEST, MIN_PRICE, MIN_ROOM, MIN_TITLE } from '../offer.constant.js';
 
@@ -27,6 +27,8 @@ export class UpdateOfferDto {
   public preview?: string;
 
   @IsOptional()
+  @ArrayMinSize(6, { message: CreateUpdateOfferMessage.images.invalidSize })
+  @ArrayMaxSize(6, { message: CreateUpdateOfferMessage.images.invalidSize })
   @IsArray({ message: CreateUpdateOfferMessage.images.invalidFormat })
   public image?: string[];
 

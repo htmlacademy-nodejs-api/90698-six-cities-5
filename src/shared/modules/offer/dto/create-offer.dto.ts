@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsIn, IsEnum, MaxLength, MinLength, IsBoolean, Min, Max, IsOptional } from 'class-validator';
+import { IsArray, IsDateString, IsIn, IsEnum, MaxLength, MinLength, IsBoolean, Min, Max, IsOptional, ArrayMinSize, ArrayMaxSize } from 'class-validator';
 import { OfferType, City } from '../../../types/index.js';
 import { Comfort } from '../../../types/index.js';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
@@ -22,6 +22,8 @@ export class CreateOfferDto {
 
   public preview: string;
 
+  @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
+  @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
   public image: string[];
 

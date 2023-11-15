@@ -24,6 +24,7 @@ export const CreateOfferValidationMessage = {
   },
   images: {
     invalidFormat: 'Field favourites must be array',
+    invalidSize: 'images must be 6'
   },
   room: {
     invalidValue: 'Minimum room is 1 and Maximum room is 8',
