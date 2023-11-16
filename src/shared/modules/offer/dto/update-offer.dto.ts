@@ -1,18 +1,18 @@
 import { City, Comfort, OfferType } from '../../../types/index.js';
 import { IsDateString, IsEnum, IsOptional, ArrayMinSize, ArrayMaxSize, Max, MaxLength, Min, MinLength, IsBoolean, IsArray, IsIn} from 'class-validator';
 import { CreateUpdateOfferMessage } from './update-offer.messages.js';
-import { MAX_DESCRIPTION, MAX_GUEST, MAX_PRICE, MAX_TITLE, MIN_DESCRIPTION, MIN_GUEST, MIN_PRICE, MIN_ROOM, MIN_TITLE } from '../offer.constant.js';
+import { TITLE, DESCRIPTION, ROOM, GUEST, PRICE, IMAGES_COUNT } from '../offer.constant.js';
 
 export class UpdateOfferDto {
 
   @IsOptional()
-  @MinLength(MIN_TITLE,{ message: CreateUpdateOfferMessage.title.minLength })
-  @MaxLength(MAX_TITLE, { message: CreateUpdateOfferMessage.title.maxLength })
+  @MinLength(TITLE.MIN,{ message: CreateUpdateOfferMessage.title.minLength })
+  @MaxLength(TITLE.MAX, { message: CreateUpdateOfferMessage.title.maxLength })
   public title?: string;
 
   @IsOptional()
-  @MinLength(MIN_DESCRIPTION, { message: CreateUpdateOfferMessage.description.minLength })
-  @MaxLength(MAX_DESCRIPTION, { message: CreateUpdateOfferMessage.description.maxLength })
+  @MinLength(DESCRIPTION.MIN, { message: CreateUpdateOfferMessage.description.minLength })
+  @MaxLength(DESCRIPTION.MAX, { message: CreateUpdateOfferMessage.description.maxLength })
   public description?: string;
 
   @IsOptional()
@@ -27,8 +27,8 @@ export class UpdateOfferDto {
   public preview?: string;
 
   @IsOptional()
-  @ArrayMinSize(6, { message: CreateUpdateOfferMessage.images.invalidSize })
-  @ArrayMaxSize(6, { message: CreateUpdateOfferMessage.images.invalidSize })
+  @ArrayMinSize(IMAGES_COUNT, { message: CreateUpdateOfferMessage.images.invalidSize })
+  @ArrayMaxSize(IMAGES_COUNT, { message: CreateUpdateOfferMessage.images.invalidSize })
   @IsArray({ message: CreateUpdateOfferMessage.images.invalidFormat })
   public images?: string[];
 
@@ -41,18 +41,18 @@ export class UpdateOfferDto {
   public type?: OfferType;
 
   @IsOptional()
-  @Min(MIN_ROOM, { message: CreateUpdateOfferMessage.room.invalidValue })
-  @Max(MIN_ROOM, { message: CreateUpdateOfferMessage.room.invalidValue })
+  @Min(ROOM.MIN, { message: CreateUpdateOfferMessage.room.invalidValue })
+  @Max(ROOM.MAX, { message: CreateUpdateOfferMessage.room.invalidValue })
   public room?: number;
 
   @IsOptional()
-  @Min(MIN_GUEST, { message: CreateUpdateOfferMessage.guests.invalidValue })
-  @Max(MAX_GUEST, { message: CreateUpdateOfferMessage.guests.invalidValue })
+  @Min(GUEST.MIN, { message: CreateUpdateOfferMessage.guests.invalidValue })
+  @Max(GUEST.MAX, { message: CreateUpdateOfferMessage.guests.invalidValue })
   public guests?: number;
 
   @IsOptional()
-  @Min(MIN_PRICE, { message: CreateUpdateOfferMessage.price.invalidValue })
-  @Max(MAX_PRICE, { message: CreateUpdateOfferMessage.price.invalidValue })
+  @Min(PRICE.MIN, { message: CreateUpdateOfferMessage.price.invalidValue })
+  @Max(PRICE.MAX, { message: CreateUpdateOfferMessage.price.invalidValue })
   public price?: number;
 
   @IsOptional()

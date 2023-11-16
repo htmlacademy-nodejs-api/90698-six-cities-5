@@ -1,5 +1,7 @@
 import { Offer, OfferType, Comfort, City, UserType } from '../types/index.js';
 
+const RADIX = 10;
+
 export function createOffer(offerData: string): Offer {
   const [
     title,
@@ -33,9 +35,9 @@ export function createOffer(offerData: string): Offer {
     premium: premium === 'true',
     rating: Number.parseFloat(rating),
     type: OfferType[type as 'Apartment' | 'House' | 'Room' | 'Hotel'],
-    room: Number.parseInt(room, 10),
-    guests: Number.parseInt(guests, 10),
-    price: Number.parseInt(price, 10),
+    room: Number.parseInt(room, RADIX),
+    guests: Number.parseInt(guests, RADIX),
+    price: Number.parseInt(price, RADIX),
     comfort: comfort.split(';')
       .map((comforts) => Comfort[comforts as 'Breakfast' | 'AirConditioning' | 'LaptopFriendlyWorkspace' | 'BabySeat' | 'Washer' | 'Towels' | 'Fridge']),
     user: { firstname, email, avatarPath, userType: UserType[userType as 'Ordinary' | 'Pro' ] },
